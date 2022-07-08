@@ -1,6 +1,12 @@
+cloud-targets := $(notdir $(basename $(wildcard deployment-manager/*)))
+
 .PHONY: cloud
-cloud: scripts/deploy-cloud
-	./$<
+cloud: $(cloud-targets)
+
+
+.PHONY: $(cloud-targets)
+$(cloud-targets): scripts/deploy-cloud
+	./$< $@
 
 
 .PHONY: format

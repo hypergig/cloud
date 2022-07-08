@@ -1,13 +1,14 @@
-function(project, location) {
+local vars = import '../vars.jsonnet';
+{
   resources: [
     {
-      name: 'fun-cluster',
-      type: 'gcp-types/container-v1beta1:projects.locations.clusters',
+      name: vars.cluster.name,
+      type: 'gcp-types/container-v1:projects.locations.clusters',
       properties: {
-        parent: 'projects/%s/locations/%s' % [project, location],
+        parent: 'projects/%s/locations/%s' % [vars.project, vars.location],
         cluster: {
-          network: 'projects/%s/global/networks/default' % project,
-          subnetwork: 'projects/%s/regions/%s/subnetworks/default' % [project, location],
+          network: 'projects/%s/global/networks/default' % vars.project,
+          subnetwork: 'projects/%s/regions/%s/subnetworks/default' % [vars.project, vars.location],
           networkPolicy: {},
           ipAllocationPolicy: {
             useIpAliases: true,
@@ -37,7 +38,7 @@ function(project, location) {
             pubsub: {},
           },
           initialClusterVersion: '1.22.8-gke.202',
-          location: '%s' % location,
+          location: '%s' % vars.location,
           autopilot: {
             enabled: true,
           },

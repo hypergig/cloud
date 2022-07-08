@@ -1,15 +1,21 @@
 #! /usr/bin/env bash
 set -xeuo pipefail
 
-source .vars
+name=$1
+
 manifest="$(jsonnet \
     -A project="${CLOUDSDK_CORE_PROJECT}" \
     -A location="${CLOUDSDK_COMPUTE_REGION}" \
-    deployment-manager.jsonnet)"
+    "deployment-manager/${name}.jsonnet")"
 set +x
 
 jq . <<< "${manifest}"
 read -p 'PRESS ENTER '
 
+op='create'
+if gcloud beta deployment-manager deployments describe "${name}"; then
+    op='update'
+fi
+
 set -x
-exec gcloud beta deployment-manager deployments update --config <(echo "${manifest}") fun-cluster
+exec gcloud beta deployment-manager deployments "${op}" --config <(echo "${manifest}") "${name}"
