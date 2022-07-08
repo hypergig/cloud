@@ -1,6 +1,15 @@
-#!/usr/bin/env bash
+#! /usr/bin/env bash
 set -xeuo pipefail
 
-jsonnet --tla-code-file vars=.vars deployment-manager.jsonnet | \
-tee /dev/stderr | \
-gcloud beta deployment-manager deployments update --config /dev/stdin fun-cluster
+source .vars
+manifest="$(jsonnet \
+    -A project="${CLOUDSDK_CORE_PROJECT}" \
+    -A location="${CLOUDSDK_COMPUTE_REGION}" \
+    deployment-manager.jsonnet)"
+set +x
+
+jq . <<< "${manifest}"
+read -p 'PRESS ENTER '
+
+set -x
+exec gcloud beta deployment-manager deployments update --config <(echo "${manifest}") fun-cluster

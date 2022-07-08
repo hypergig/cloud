@@ -1,13 +1,13 @@
-function(vars) {
+function(project, location) {
   resources: [
     {
       name: 'fun-cluster',
       type: 'gcp-types/container-v1beta1:projects.locations.clusters',
       properties: {
-        parent: 'projects/%s/locations/%s' % [vars.project, vars.location],
+        parent: 'projects/%s/locations/%s' % [project, location],
         cluster: {
-          network: 'projects/%s/global/networks/default' % vars.project,
-          subnetwork: 'projects/%s/regions/%s/subnetworks/default' % [vars.project, vars.location],
+          network: 'projects/%s/global/networks/default' % project,
+          subnetwork: 'projects/%s/regions/%s/subnetworks/default' % [project, location],
           networkPolicy: {},
           ipAllocationPolicy: {
             useIpAliases: true,
@@ -37,7 +37,7 @@ function(vars) {
             pubsub: {},
           },
           initialClusterVersion: '1.22.8-gke.202',
-          location: '%s' % vars.location,
+          location: '%s' % location,
           autopilot: {
             enabled: true,
           },
