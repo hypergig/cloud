@@ -2,5 +2,4 @@
   cluster: {
     name: 'primary',
   },
-  disk: 'bedrock-0',
 }
