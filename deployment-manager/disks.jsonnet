@@ -26,7 +26,7 @@ local vars = import '../vars.jsonnet';
       },
     },
     {
-      name: vars.disk,
+      name: vars.minecraftServer.disk,
       type: 'gcp-types/compute-v1:disks',
       metadata: {
         dependsOn: [
@@ -35,8 +35,8 @@ local vars = import '../vars.jsonnet';
       },
       properties: {
         sizeGb: '10',
-        zone: '%s-a' % vars.location,
-        type: 'projects/%s/zones/%s-a/diskTypes/pd-balanced' % [vars.project, vars.location],
+        zone: vars.diskZone,
+        type: 'projects/%s/zones/%s/diskTypes/pd-balanced' % [vars.project, vars.diskZone],
         resourcePolicies: [
           'projects/%s/regions/%s/resourcePolicies/%s' % [vars.project, vars.location, $.resources[0].name],
         ],

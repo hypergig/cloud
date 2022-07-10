@@ -17,3 +17,4 @@ format: $(shell find . -name '*.jsonnet')
 .PHONY: apply
 apply:
 	jsonnet -y kubernetes/manifest.jsonnet | kubectl apply -f -
+	jsonnet -y kubernetes/deployments.jsonnet | kubectl rollout status -w -f -
