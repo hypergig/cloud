@@ -7,8 +7,12 @@ local vars = import '../vars.jsonnet';
       properties: {
         parent: 'projects/%s/locations/%s' % [vars.project, vars.location],
         cluster: {
+
+          // actual vars
           network: 'projects/%s/global/networks/default' % vars.project,
           subnetwork: 'projects/%s/regions/%s/subnetworks/default' % [vars.project, vars.location],
+
+          // the rest
           networkPolicy: {},
           ipAllocationPolicy: {
             useIpAliases: true,
@@ -16,6 +20,17 @@ local vars = import '../vars.jsonnet';
             servicesIpv4CidrBlock: '/22',
           },
           masterAuthorizedNetworksConfig: {},
+          maintenancePolicy: {
+            window: {
+              recurringWindow: {
+                window: {
+                  startTime: '2022-07-12T04:00:00Z',
+                  endTime: '2022-07-12T09:00:00Z',
+                },
+                recurrence: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA,SU',
+              },
+            },
+          },
           binaryAuthorization: {},
           autoscaling: {
             enableNodeAutoprovisioning: true,
@@ -38,7 +53,6 @@ local vars = import '../vars.jsonnet';
             pubsub: {},
           },
           initialClusterVersion: '1.22.8-gke.202',
-          location: '%s' % vars.location,
           autopilot: {
             enabled: true,
           },
