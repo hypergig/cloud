@@ -1,17 +1,16 @@
-local helpers = import '../lib/helpers.jsonnet';
 local vars = import '../vars.jsonnet';
-
-local selector = {
-  app: vars.minecraftServer.name,
-};
 
 local name = {
   name: vars.minecraftServer.name,
 };
 
+local selector = {
+  app: name.name,
+};
+
 local metadata = {
   metadata: name {
-    labels: selector,
+    labels+: selector,
   },
 };
 
@@ -44,8 +43,7 @@ local metadata = {
       template: metadata {
         spec: {
           containers: [
-            {
-              name: 'main',
+            name {
               image: 'itzg/minecraft-bedrock-server',
               imagePullPolicy: 'Always',
               tty: true,
@@ -73,7 +71,7 @@ local metadata = {
                 // ie - limits == requests
                 requests: {
                   cpu: '2',
-                  'ephemeral-storage': '1Gi',
+                  'ephemeral-storage': '10Gi',
                   memory: '2Gi',
                 },
               },
