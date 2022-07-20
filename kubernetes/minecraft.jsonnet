@@ -18,6 +18,11 @@ local metadata = {
   metadata {
     apiVersion: 'v1',
     kind: 'Service',
+    metadata+: {
+      annotations+: {
+        'external-dns.alpha.kubernetes.io/hostname': vars.dns.fqdn,
+      },
+    },
     spec: {
       selector: selector,
       ports: [
