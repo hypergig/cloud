@@ -74,5 +74,23 @@ local vars = import '../vars.jsonnet';
         },
       },
     },
+    {
+      name: self.properties.name,
+      type: 'gcp-types/cloudbuild-v1:projects.triggers',
+      properties: {
+        name: 'start-minecraft',
+        gitFileSource: {
+          path: 'cloudbuild.yaml',
+          repoType: 'GITHUB',
+          revision: 'refs/heads/main',
+          uri: 'https://github.com/hypergig/cloud',
+        },
+        sourceToBuild: {
+          ref: 'refs/heads/main',
+          repoType: 'GITHUB',
+          uri: 'https://github.com/hypergig/cloud',
+        },
+      },
+    },
   ],
 }
