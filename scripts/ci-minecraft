@@ -13,23 +13,21 @@ vars="$(jsonnet vars.jsonnet)"
 set -x
 
 jsonnet -y kubernetes/manifest.jsonnet | head -n-1 > manifest.yaml
-gke_deploy="gke-deploy run \
-  --filename manifest.yaml \
-  --location $(jq -r '.location' <<< "${vars}") \
-  --cluster $(jq -r '.cluster.name' <<< "${vars}")"
+read  CLOUDSDK_CORE_PROJECT CLOUDSDK_COMPUTE_REGION cluster_name <<< "$(jq -r '.project + " " +  .location + " " + .cluster.name' <<< "${vars}")"
+export CLOUDSDK_CORE_PROJECT CLOUDSDK_COMPUTE_REGION
 
 
 case "${op}" in
 
   start-minecraft)
-    exec ${gke_deploy}
+    exec gke-deploy run \
+      --filename manifest.yaml \
+      --location "${CLOUDSDK_COMPUTE_REGION}" \
+      --cluster "${cluster_name}"
     ;;
 
   stop-minecraft)
-    # running this in dry run fetches the clusters creds so the next kubectl works,
-    # this is a workaround so I don't have to install any gcloud components
-    gcloud container clusters get-credentials "$(jq -r '.cluster.name' <<< "${vars}")"
-    ##${gke_deploy} --server-dry-run
+    gcloud container clusters get-credentials "${cluster_name}"
     exec kubectl delete --ignore-not-found=true -f manifest.yaml
     ;;
 
