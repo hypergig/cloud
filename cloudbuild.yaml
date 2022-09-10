@@ -1,7 +1,9 @@
 steps:
 - id: start minecraft
   name: gcr.io/cloud-builders/gke-deploy
-  entrypoint: scripts/ci-start-minecraft
+  entrypoint: scripts/ci-minecraft
+  args:
+  - $TRIGGER_NAME
   secretEnv: ['PRIVATE']
 
 availableSecrets:
