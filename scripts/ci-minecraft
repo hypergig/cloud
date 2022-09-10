@@ -26,7 +26,10 @@ case "${op}" in
     ;;
 
   stop-minecraft)
-    ${gke_deploy} --server-dry-run
+    # running this in dry run fetches the clusters creds so the next kubectl works,
+    # this is a workaround so I don't have to install any gcloud components
+    gcloud container clusters get-credentials "$(jq -r '.cluster.name' <<< "${vars}")"
+    ##${gke_deploy} --server-dry-run
     exec kubectl delete --ignore-not-found=true -f manifest.yaml
     ;;
 
