@@ -1,5 +1,6 @@
 #! /usr/bin/env bash
 set -xeuo pipefail
+op="$1"
 
 apk --no-cache add curl jq
 curl -sSLO https://github.com/google/go-jsonnet/releases/download/v0.18.0/go-jsonnet_0.18.0_Linux_x86_64.tar.gz
@@ -12,7 +13,22 @@ vars="$(jsonnet vars.jsonnet)"
 set -x
 
 jsonnet -y kubernetes/manifest.jsonnet | head -n-1 > manifest.yaml
-/gke-deploy run \
-  --filename manifest.yaml \
-  --location "$(jq -r '.location' <<< "${vars}")" \
-  --cluster "$(jq -r '.cluster.name' <<< "${vars}")"
+
+case "${op}" in
+
+  start)
+    exec /gke-deploy run \
+      --filename manifest.yaml \
+      --location "$(jq -r '.location' <<< "${vars}")" \
+      --cluster "$(jq -r '.cluster.name' <<< "${vars}")"
+    ;;
+
+  stop)
+    exec kubectl delete -f manifest.yaml
+    ;;
+
+  *)
+    echo "unrecognized operation: ${op}"
+    exit 1
+
+esac
