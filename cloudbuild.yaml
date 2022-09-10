@@ -1,5 +1,5 @@
 steps:
-- id: start minecraft
+- id: minecraft
   name: gcr.io/cloud-builders/gke-deploy
   entrypoint: scripts/ci-minecraft
   args:
