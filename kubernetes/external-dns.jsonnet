@@ -66,6 +66,14 @@ local metadata = {
     ],
   },
   metadata {
+    apiVersion: 'v1',
+    kind: 'Secret',
+    data: {
+      key: std.base64(vars.godaddy.key),
+      secret: std.base64(vars.godaddy.secret),
+    },
+  },
+  metadata {
     apiVersion: 'batch/v1',
     kind: 'Job',
     spec: {
@@ -80,15 +88,35 @@ local metadata = {
             name + helpers.minResources {
               image: 'k8s.gcr.io/external-dns/external-dns:v0.12.0',
               imagePullPolicy: 'Always',
+              env: [
+                {
+                  name: 'GODADDY_API_KEY',
+                  valueFrom: {
+                    secretKeyRef: {
+                      name: name.name,
+                      key: 'key',
+                    },
+                  },
+                },
+                {
+                  name: 'GODADDY_API_SECRET',
+                  valueFrom: {
+                    secretKeyRef: {
+                      name: name.name,
+                      key: 'secret',
+                    },
+                  },
+                },
+              ],
               args: [
                 '--once',
                 '--source=service',
                 '--domain-filter=' + vars.dns.zone,
                 '--provider=godaddy',
-                '--txt-prefix=external-dns.',
+                '--txt-prefix=%s.' % name.name,
                 '--txt-owner-id=' + vars.minecraftServer.name,
-                '--godaddy-api-key=' + vars.godaddy.key,
-                '--godaddy-api-secret=' + vars.godaddy.secret,
+                '--godaddy-api-key=$(GODADDY_API_KEY)',
+                '--godaddy-api-secret=$(GODADDY_API_SECRET)',
                 '--log-level=debug',
               ],
             },
