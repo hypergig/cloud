@@ -16,14 +16,20 @@ jsonnet -y kubernetes/manifest.jsonnet | head -n-1 > manifest.yaml
 
 case "${op}" in
 
-  start)
+  start-minecraft)
     exec /gke-deploy run \
       --filename manifest.yaml \
       --location "$(jq -r '.location' <<< "${vars}")" \
       --cluster "$(jq -r '.cluster.name' <<< "${vars}")"
     ;;
 
-  stop)
+  stop-minecraft)
+    ##gcloud beta container clusters get-credentials "$(jq -r '.cluster.name' <<< "${vars}")"
+    /gke-deploy run \
+      --server-dry-run \
+      --filename manifest.yaml \
+      --location "$(jq -r '.location' <<< "${vars}")" \
+      --cluster "$(jq -r '.cluster.name' <<< "${vars}")"
     exec kubectl delete -f manifest.yaml
     ;;
 

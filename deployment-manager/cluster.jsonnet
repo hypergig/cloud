@@ -74,11 +74,12 @@ local vars = import '../vars.jsonnet';
         },
       },
     },
-    {
+  ] + std.map(
+    function(op) {
       name: self.properties.name,
       type: 'gcp-types/cloudbuild-v1:projects.triggers',
       properties: {
-        name: 'start-minecraft',
+        name: op + '-minecraft',
         gitFileSource: {
           path: 'cloudbuild.yaml',
           repoType: 'GITHUB',
@@ -92,5 +93,6 @@ local vars = import '../vars.jsonnet';
         },
       },
     },
-  ],
+    ['start', 'stop']
+  ),
 }
