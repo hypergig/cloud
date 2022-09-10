@@ -2,20 +2,18 @@
 set -xeuo pipefail
 
 name=$1
+manifest="$(mktemp -t deployment.XXXXXXXXXXXX)"
 
-manifest="$(jsonnet \
-    -A project="${CLOUDSDK_CORE_PROJECT}" \
-    -A location="${CLOUDSDK_COMPUTE_REGION}" \
-    "deployment-manager/${name}.jsonnet")"
+jsonnet -o "${manifest}" "deployment-manager/${name}.jsonnet"
+
 set +x
-
-jq . <<< "${manifest}"
+jq . "${manifest}"
 read -p 'PRESS ENTER '
 
 op='create'
 if gcloud beta deployment-manager deployments describe "${name}"; then
-    op='update'
+    op='update --delete-policy=abandon'
 fi
-
 set -x
-exec gcloud beta deployment-manager deployments "${op}" --config <(echo "${manifest}") "${name}"
+
+exec gcloud beta deployment-manager deployments ${op} --config "${manifest}" "${name}"
