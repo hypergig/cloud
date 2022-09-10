@@ -1,0 +1,10 @@
+steps:
+- id: start minecraft
+  name: gcr.io/cloud-builders/gke-deploy
+  entrypoint: scripts/ci-start-minecraft
+  secretEnv: ['PRIVATE']
+
+availableSecrets:
+  secretManager:
+  - versionName: projects/$PROJECT_ID/secrets/vars/versions/latest
+    env: PRIVATE
