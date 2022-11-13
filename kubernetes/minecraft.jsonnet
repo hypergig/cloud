@@ -1,3 +1,4 @@
+local helpers = import '../lib/helpers.jsonnet';
 local vars = import '../vars.jsonnet';
 
 local name = {
@@ -48,7 +49,7 @@ local metadata = {
       template: metadata {
         spec: {
           containers: [
-            name {
+            name + helpers.minResources {
               image: 'itzg/minecraft-bedrock-server',
               imagePullPolicy: 'Always',
               tty: true,
@@ -71,13 +72,11 @@ local metadata = {
               ],
               volumeMounts: [{ name: 'data', mountPath: '/data' }],
               ports: [{ containerPort: 19132, protocol: 'UDP' }],
-              resources: {
+              resources+: {
                 // autopilot pods are always guaranteed QoS
                 // ie - limits == requests
-                requests: {
-                  cpu: '2',
-                  'ephemeral-storage': '10Gi',
-                  memory: '2Gi',
+                requests+: {
+                  cpu: 2,
                 },
               },
             },

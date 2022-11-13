@@ -7,9 +7,9 @@
       // autopilot pods are always guaranteed QoS
       // ie - limits == requests
       requests: {
-        cpu: '1m',
-        'ephemeral-storage': '1Mi',
-        memory: '1Mi',
+        cpu: '500m',
+        'ephemeral-storage': '1Gi',
+        memory: '2Gi',
       },
     },
   },
