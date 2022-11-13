@@ -84,6 +84,24 @@ local metadata = {
           nodeSelector: {
             'cloud.google.com/gke-spot': 'true',
           },
+          initContainers: [
+            helpers.minResources {
+              name: 'blocker',
+              image: 'bitnami/kubectl',
+              imagePullPolicy: 'Always',
+              command: [
+                'bash',
+                '-c',
+                |||
+                  until [ -n "$(kubectl get service %s -o jsonpath='{.status.loadBalancer.ingress[].ip}')" ]; do
+                    echo 'waiting for ingress'
+                    sleep 1
+                  done
+                  echo 'ingress ready'
+                ||| % vars.minecraftServer.name,
+              ],
+            },
+          ],
           containers: [
             name + helpers.minResources {
               image: 'k8s.gcr.io/external-dns/external-dns:v0.12.0',
