@@ -1,1 +1,3 @@
 vars.private.jsonnet
+/bin/
+/node_modules/
