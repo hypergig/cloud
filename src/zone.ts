@@ -8,5 +8,5 @@ export const zone = new gcp.dns.ManagedZone(
     name: "primary",
     dnsName: config.require("rootDomain") + ".",
   },
-  { protect: true }
+  { protect: true },
 )

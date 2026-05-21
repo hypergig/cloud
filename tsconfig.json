@@ -1,19 +1,19 @@
 {
-    "compilerOptions": {
-        "strict": true,
-        "outDir": "bin",
-        "rootDir": ".",
-        "target": "ES2023",
-        "module": "NodeNext",
-        "moduleResolution": "NodeNext",
-        "sourceMap": true,
-        "experimentalDecorators": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "pretty": true,
-        "noFallthroughCasesInSwitch": true,
-        "noImplicitReturns": true,
-        "forceConsistentCasingInFileNames": true
-    },
-    "files": ["index.ts"]
+  "compilerOptions": {
+    "strict": true,
+    "outDir": "bin",
+    "rootDir": ".",
+    "target": "ES2023",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "pretty": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "files": ["index.ts"]
 }

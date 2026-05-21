@@ -12,5 +12,5 @@ export const disk = new gcp.compute.Disk(
     size: 10,
     createSnapshotBeforeDestroy: true,
   },
-  { protect: true }
+  { protect: true },
 )

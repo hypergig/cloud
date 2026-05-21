@@ -1,13 +1,14 @@
 {
-    "name": "minecraft",
-    "main": "index.ts",
-    "devDependencies": {
-        "@types/node": "^25",
-        "typescript": "^6.0.3"
-    },
-    "dependencies": {
-        "@pulumi/gcp": "^9.23.0",
-        "@pulumi/pulumi": "^3.242.0"
-    },
-    "packageManager": "npm@11.15.0"
+  "name": "minecraft",
+  "main": "index.ts",
+  "devDependencies": {
+    "@types/node": "^25",
+    "prettier": "3.8.3",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "@pulumi/gcp": "^9.23.0",
+    "@pulumi/pulumi": "^3.242.0"
+  },
+  "packageManager": "npm@11.15.0"
 }
