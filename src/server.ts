@@ -14,10 +14,12 @@ const container = {
     containers: [
       {
         name: name,
-        image: "itzg/minecraft-bedrock-server",
+        image: "itzg/minecraft-bedrock-server:latest",
         stdin: true,
         tty: true,
         env: [
+          { name: "DEBUG_CURL", value: "true" },
+
           // users
           { name: "OPS", value: ops.join(",") },
           { name: "ALLOW_LIST_USERS", value: allowList.join(",") },
@@ -105,7 +107,7 @@ function ensure(desiredStatus: string) {
     {
       replaceOnChanges: ["metadata"],
       deleteBeforeReplace: true,
-    }
+    },
   )
 
   // only instantiate the A record when desired state is RUNNING,
@@ -124,7 +126,7 @@ function ensure(desiredStatus: string) {
       managedZone: zone.name,
       rrdatas: [
         server.networkInterfaces.apply(
-          n => n[0].accessConfigs?.[0]?.natIp || "UNKNOWN"
+          n => n[0].accessConfigs?.[0]?.natIp || "UNKNOWN",
         ),
       ],
     })
